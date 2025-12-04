@@ -1,51 +1,45 @@
-/* =========================================
-   1. SETUP VARIABEL WARNA (Palet Warna)
-   ========================================= */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    /* --- MODE SIANG (DEFAULT) --- */
-    --bg-page: #ecf0f1;          /* Latar Belakang Halaman (Abu Terang) */
-    --bg-card: #ffffff;          /* Latar Belakang Kotak (Putih) */
-    --text-main: #2c3e50;        /* Teks Utama (Hitam Kebiruan) */
-    --text-muted: #7f8c8d;       /* Teks Pudar (Abu-abu) */
-    --border-color: #bdc3c7;     /* Garis Batas */
-    --input-bg: #ffffff;         /* Latar Input */
-    
-    --accent: #10ac84;           /* Hijau (Tombol Waris) */
+    --bg-page: #ecf0f1;          
+    --bg-card: #ffffff;          
+    --text-main: #2c3e50;        
+    --text-muted: #7f8c8d;       
+    --border-color: #bdc3c7;     
+    --input-bg: #ffffff;         
+    --accent: #10ac84;           
     --accent-hover: #0d8a6a;
-    --tax: #e74c3c;              /* Merah (Tombol Pajak) */
+    --tax: #e74c3c;             
     --tax-hover: #c0392b;
     
-    --table-head-bg: #2c3e50;    /* Header Tabel */
+    --table-head-bg: #2c3e50;   
     --table-head-text: #ffffff;
     --row-hover: #f1f2f6;
 }
 
-/* --- MODE MALAM (DARK MODE) --- */
+
 body.dark-mode {
-    --bg-page: #121212;          /* Hitam Pekat */
-    --bg-card: #1e272e;          /* Abu Gelap (Elegan) */
-    --text-main: #ecf0f1;        /* Putih Terang */
-    --text-muted: #bdc3c7;       /* Abu Terang */
-    --border-color: #4b6584;     /* Garis Biru Pucat */
-    --input-bg: #2f3640;         /* Input Abu Gelap */
+    --bg-page: #121212;          
+    --bg-card: #1e272e;          
+    --text-main: #ecf0f1;        
+    --text-muted: #bdc3c7;       
+    --border-color: #4b6584;     
+    --input-bg: #2f3640;         
     
-    --accent: #1dd1a1;           /* Hijau Neon (Lebih terang di gelap) */
+    --accent: #1dd1a1;           
     --accent-hover: #10ac84;
-    --tax: #ff6b6b;              /* Merah Muda (Lebih terang di gelap) */
+    --tax: #ff6b6b;              
     --tax-hover: #ee5253;
     
     --table-head-bg: #000000;
-    --table-head-text: #1dd1a1;  /* Teks Header jadi Hijau */
+    --table-head-text: #1dd1a1; 
     --row-hover: #2c3e50;
 }
 
-/* =========================================
-   2. STYLE DASAR (Reset & Body)
-   ========================================= */
+
 * {
-    box-sizing: border-box; /* Agar ukuran kotak rapi */
+    box-sizing: border-box; 
 }
 
 body {
@@ -58,9 +52,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* =========================================
-   3. CONTAINER (KOTAK UTAMA)
-   ========================================= */
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -71,15 +62,12 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* Efek bayangan lebih tebal saat dark mode */
 body.dark-mode .container {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     border: 1px solid var(--border-color);
 }
 
-/* =========================================
-   4. TYPOGRAPHY (JUDUL & TEKS)
-   ========================================= */
+
 h1, h2, h3, h4 {
     color: var(--text-main);
     transition: color 0.3s;
@@ -109,15 +97,13 @@ small {
     color: var(--text-muted);
 }
 
-/* =========================================
-   5. FORM & INPUT (Sangat Penting untuk Dark Mode)
-   ========================================= */
+
 .form-section {
     padding: 20px;
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: transparent; /* Transparan agar ikut warna container */
+    background-color: transparent; 
 }
 
 label {
@@ -127,7 +113,6 @@ label {
     color: var(--text-main);
 }
 
-/* Input Field: Pastikan Background & Text mengikuti variabel */
 input[type="number"], 
 input[type="text"], 
 select {
@@ -147,7 +132,6 @@ input:focus, select:focus {
     box-shadow: 0 0 5px rgba(16, 172, 132, 0.3);
 }
 
-/* Radio Button Group */
 .radio-group {
     display: flex;
     gap: 10px;
@@ -172,9 +156,7 @@ input:focus, select:focus {
     background-color: var(--border-color);
 }
 
-/* =========================================
-   6. TOMBOL (BUTTONS)
-   ========================================= */
+
 button {
     width: 100%;
     padding: 15px;
@@ -183,7 +165,7 @@ button {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    color: #ffffff; /* Teks tombol selalu putih */
+    color: #ffffff; 
     text-transform: uppercase;
     transition: transform 0.1s, background-color 0.3s;
 }
@@ -261,9 +243,7 @@ tr:hover {
     color: var(--text-main);
 }
 
-/* =========================================
-   8. HASIL & ERROR
-   ========================================= */
+
 .result-box {
     display: none;
     margin-top: 30px;
@@ -303,4 +283,50 @@ tr:hover {
     width: 120px; 
     height: auto ;
     border-radius: 50%
+}
+
+@media screen and (max-width: 600px) {
+    
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+    }
+    h2 {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+
+    table, 
+    .asset-table, 
+    .result-table {
+        display: block;        
+        overflow-x: auto;      
+        white-space: nowrap;   
+        width: 100%;
+    }
+
+    
+    .radio-group label {
+        padding: 8px 5px;
+        font-size: 0.85em; 
+    }
+
+    .btn-add {
+        width: 100%;
+        text-align: center;
+        margin-top: 15px;
+    }
+    
+    input[type="number"], 
+    input[type="text"], 
+    select {
+        font-size: 16px; 
+    }
 }
