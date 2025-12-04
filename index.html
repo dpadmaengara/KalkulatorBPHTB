@@ -54,7 +54,7 @@
                 <label>Jenis Kelamin Pewaris (Yang Meninggal):</label>
                 <div class="radio-group">
                     <label>
-                        <input type="radio" name="genderPewaris" value="L" onchange="toggleSpouse('L')"> 
+                        <input type="radio" name="genderPewaris" value="L" onchange="toggleSpouse('L')" checked> 
                         Laki-laki
                     </label>
                     <label>
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="form-group hidden" id="inputIstriGroup">
+            <div class="form-group" id="inputIstriGroup" style="display: block;">
                 <label>Jumlah Istri (Maksimal 4)</label>
                 <input type="number" id="istri" value="0" min="0" max="4" oninput="validasiIstri(this)" placeholder="0">
                 <small style="color:red; display:none;" id="alertIstri">Maksimal istri dibatasi 4 orang.</small>
@@ -184,8 +184,7 @@
             if(groupSuami) groupSuami.style.display = 'none'; 
             if(valSuami) valSuami.value = 0; 
             
-            
-            if(groupIstri) groupIstri.syle.display = 'block';
+            if(groupIstri) groupIstri.style.display = 'block';
             
         } else {
             if(groupIstri) groupIstri.style.display = 'none';
