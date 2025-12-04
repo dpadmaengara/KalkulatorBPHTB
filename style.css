@@ -1,0 +1,306 @@
+/* =========================================
+   1. SETUP VARIABEL WARNA (Palet Warna)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    /* --- MODE SIANG (DEFAULT) --- */
+    --bg-page: #ecf0f1;          /* Latar Belakang Halaman (Abu Terang) */
+    --bg-card: #ffffff;          /* Latar Belakang Kotak (Putih) */
+    --text-main: #2c3e50;        /* Teks Utama (Hitam Kebiruan) */
+    --text-muted: #7f8c8d;       /* Teks Pudar (Abu-abu) */
+    --border-color: #bdc3c7;     /* Garis Batas */
+    --input-bg: #ffffff;         /* Latar Input */
+    
+    --accent: #10ac84;           /* Hijau (Tombol Waris) */
+    --accent-hover: #0d8a6a;
+    --tax: #e74c3c;              /* Merah (Tombol Pajak) */
+    --tax-hover: #c0392b;
+    
+    --table-head-bg: #2c3e50;    /* Header Tabel */
+    --table-head-text: #ffffff;
+    --row-hover: #f1f2f6;
+}
+
+/* --- MODE MALAM (DARK MODE) --- */
+body.dark-mode {
+    --bg-page: #121212;          /* Hitam Pekat */
+    --bg-card: #1e272e;          /* Abu Gelap (Elegan) */
+    --text-main: #ecf0f1;        /* Putih Terang */
+    --text-muted: #bdc3c7;       /* Abu Terang */
+    --border-color: #4b6584;     /* Garis Biru Pucat */
+    --input-bg: #2f3640;         /* Input Abu Gelap */
+    
+    --accent: #1dd1a1;           /* Hijau Neon (Lebih terang di gelap) */
+    --accent-hover: #10ac84;
+    --tax: #ff6b6b;              /* Merah Muda (Lebih terang di gelap) */
+    --tax-hover: #ee5253;
+    
+    --table-head-bg: #000000;
+    --table-head-text: #1dd1a1;  /* Teks Header jadi Hijau */
+    --row-hover: #2c3e50;
+}
+
+/* =========================================
+   2. STYLE DASAR (Reset & Body)
+   ========================================= */
+* {
+    box-sizing: border-box; /* Agar ukuran kotak rapi */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 40px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =========================================
+   3. CONTAINER (KOTAK UTAMA)
+   ========================================= */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--bg-card);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Efek bayangan lebih tebal saat dark mode */
+body.dark-mode .container {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--border-color);
+}
+
+/* =========================================
+   4. TYPOGRAPHY (JUDUL & TEKS)
+   ========================================= */
+h1, h2, h3, h4 {
+    color: var(--text-main);
+    transition: color 0.3s;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+h2 {
+    border-left: 5px solid var(--accent);
+    padding-left: 15px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95em;
+    margin-bottom: 40px;
+}
+
+small {
+    color: var(--text-muted);
+}
+
+/* =========================================
+   5. FORM & INPUT (Sangat Penting untuk Dark Mode)
+   ========================================= */
+.form-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: transparent; /* Transparan agar ikut warna container */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Input Field: Pastikan Background & Text mengikuti variabel */
+input[type="number"], 
+input[type="text"], 
+select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 5px rgba(16, 172, 132, 0.3);
+}
+
+/* Radio Button Group */
+.radio-group {
+    display: flex;
+    gap: 10px;
+    background-color: var(--input-bg);
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.radio-group label {
+    flex: 1;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    color: var(--text-main);
+    transition: background 0.2s;
+}
+
+.radio-group label:hover {
+    background-color: var(--border-color);
+}
+
+/* =========================================
+   6. TOMBOL (BUTTONS)
+   ========================================= */
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff; /* Teks tombol selalu putih */
+    text-transform: uppercase;
+    transition: transform 0.1s, background-color 0.3s;
+}
+
+button:active { transform: scale(0.98); }
+
+.btn-waris { background-color: var(--accent); }
+.btn-waris:hover { background-color: var(--accent-hover); }
+
+.btn-pajak { background-color: var(--tax); margin-top: 10px; }
+.btn-pajak:hover { background-color: var(--tax-hover); }
+
+.btn-add { 
+    background-color: #3498db; 
+    width: auto; 
+    padding: 10px 20px; 
+    font-size: 0.9em; 
+    margin-top: 10px; 
+}
+
+.btn-delete { 
+    background-color: var(--tax); 
+    width: auto; 
+    padding: 8px 12px; 
+}
+
+/* Tombol Mode Malam */
+#themeToggle {
+    background: transparent;
+    color: var(--text-main);
+    border: 2px solid var(--border-color);
+    width: auto;
+    float: right;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    text-transform: none;
+    margin-bottom: 20px;
+}
+#themeToggle:hover {
+    background-color: var(--border-color);
+}
+
+/* =========================================
+   7. TABEL (TABLES)
+   ========================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--table-head-bg);
+    color: var(--table-head-text);
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+tr:hover {
+    background-color: var(--row-hover);
+}
+
+.total-row {
+    font-weight: bold;
+    background-color: var(--input-bg);
+    color: var(--text-main);
+}
+
+/* =========================================
+   8. HASIL & ERROR
+   ========================================= */
+.result-box {
+    display: none;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgba(16, 172, 132, 0.1);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--text-main);
+}
+
+.tax-result-box {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(231, 76, 60, 0.1);
+    border: 1px solid var(--tax);
+    border-radius: 8px;
+    color: var(--text-main);
+}
+
+.badge-pmk {
+    background-color: rgba(16, 172, 132, 0.1);
+    color: var(--accent);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    border: 1px solid var(--accent);
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.hidden { display: none !important; }
+
+.app-logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 120px; 
+    height: auto ;
+    border-radius: 50%
+}

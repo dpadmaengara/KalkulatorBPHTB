@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Waris & Pajak (Sesuai Syariah & PMK)</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="container">
+        <button id="themeToggle" style="float: right; cursor: pointer; padding: 5px 10px; border-radius: 20px; border: 1px solid #ccc; background: transparent;">
+           🌙 Mode Malam  
+        </button>
+        <div style="clear: both;">
+        </div>
+        <img src="Lambang-Universitas-Airlangga-bg-transparan (1) (1).png" alt="Logo Aplikasi" class="app-logo">
+        <h1>Aplikasi Waris & Pajak Keluarga</h1>
+        <p class="subtitle">Perhitungan Faraidh & Estimasi BPHTB (Sesuai UU & PMK)</p>
+
+        <h2>1. Inventaris Harta Waris</h2>
+        <div class="form-section">
+            <span class="badge-pmk">Rincian Aset</span>
+            <p style="font-size:0.9em;">Masukkan seluruh harta peninggalan (Rumah, Tanah, Deposito, Emas, dll). Nilai harus berdasarkan <strong>Nilai Pasar Wajar</strong> (atau NJOP untuk properti jika lebih tinggi).</p>
+            
+            <table class="asset-table" id="tableHarta">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Nama Aset</th>
+                        <th style="width: 25%;">Kategori</th>
+                        <th style="width: 30%;">Estimasi Nilai (Rp)</th>
+                        <th style="width: 5%;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="2" style="text-align: right;">TOTAL HARTA BERSIH:</td>
+                        <td id="displayTotalHarta">Rp 0</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button type="button" class="btn-add" onclick="tambahBarisHarta()">+ Tambah Aset Lain</button>
+            
+            <input type="hidden" id="totalHartaValue" value="0">
+            <input type="hidden" id="totalPropertiValue" value="0">
+        </div>
+
+        <h2>2. Data Keluarga (Ahli Waris)</h2>
+        <div class="form-section">
+            <div class="form-group">
+                <label>Jenis Kelamin Pewaris (Yang Meninggal):</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="genderPewaris" value="L" onchange="toggleSpouse('L')"> 
+                        Laki-laki
+                    </label>
+                    <label>
+                        <input type="radio" name="genderPewaris" value="P" onchange="toggleSpouse('P')" checked> 
+                        Perempuan
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group hidden" id="inputIstriGroup">
+                <label>Jumlah Istri (Maksimal 4)</label>
+                <input type="number" id="istri" value="0" min="0" max="4" oninput="validasiIstri(this)" placeholder="0">
+                <small style="color:red; display:none;" id="alertIstri">Maksimal istri dibatasi 4 orang.</small>
+            </div>
+            
+            <div class="form-group" id="inputSuamiGroup">
+                <label>Suami (Maksimal 1)</label>
+                <select id="suami">
+                    <option value="0">Tidak Ada</option>
+                    <option value="1">Ada</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="radio-group">
+                    <div style="flex:1"><label>Ayah</label><select id="ayah"><option value="0">Tidak Ada</option><option value="1">Ada</option></select></div>
+                    <div style="flex:1"><label>Ibu</label><select id="ibu"><option value="0">Tidak Ada</option><option value="1">Ada</option></select></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="radio-group">
+                    <div style="flex:1">
+                        <label>Anak Laki-laki</label>
+                        <input type="number" id="anakLaki" value="0" min="0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Anak Perempuan</label>
+                        <input type="number" id="anakPerempuan" value="0" min="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-waris" onclick="hitungWaris()">Hitung Pembagian Waris</button>
+
+        <div id="resultArea" class="result-box">
+            <h3>Hasil Pembagian Waris (Faraidh)</h3>
+            <table id="resultTable" class="result-table">
+                <thead><tr><th>Ahli Waris</th><th>Bagian</th><th>Nominal (Rp)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <p id="sisaHartaInfo" style="font-weight: bold; margin-top: 15px; color:#2c3e50;"></p>
+        </div>
+
+        <div class="section-divider">
+            <span class="section-label">ASPEK PERPAJAKAN (PMK & UU HKPD)</span>
+        </div>
+
+        <h2>3. Simulasi Pajak Waris (BPHTB)</h2>
+        <div class="form-section">
+            <p style="font-size:0.9em; text-align: justify;">
+                Berdasarkan <strong>PMK 81/2024 (dan aturan sebelumnya)</strong>, Warisan <strong>BUKAN Objek PPh (Pajak Penghasilan)</strong> jika sudah dilaporkan di SPT Pewaris. Namun, untuk balik nama Tanah/Bangunan, dikenakan <strong>BPHTB Waris</strong>.
+            </p>
+            
+            <div class="form-group">
+                <label>Total Nilai Tanah & Bangunan (Otomatis dari Tabel Harta)</label>
+                <input type="text" id="displayProperti" value="Rp 0" disabled style="background-color: #eee;">
+            </div>
+
+            <div class="form-group">
+                <label>NPOPTKP Waris (Pengurang Pajak)</label>
+                <input type="number" id="npoptkp" value="300000000">
+                <small style="color: #7f8c8d;">
+                    *Sesuai <strong>UU HKPD No.1/2022</strong>, NPOPTKP Waris minimal <strong>Rp 300.000.000</strong>.
+                    <br>(DKI Jakarta bisa sampai Rp 350jt, cek Perda setempat).
+                </small>
+            </div>
+            
+            <button class="btn-pajak" onclick="hitungBPHTB()">Hitung Estimasi BPHTB</button>
+        </div>
+
+        <div id="taxResultArea" class="tax-result-box">
+            <h3>Estimasi Biaya Balik Nama (BPHTB)</h3>
+            <table class="result-table" style="background: transparent; border: none;">
+                <tr>
+                    <td>Total NPOP (Tanah/Bangunan)</td>
+                    <td id="resNPOP" style="text-align: right;">Rp 0</td>
+                </tr>
+                <tr>
+                    <td>NPOPTKP (Pengurang)</td>
+                    <td id="resNPOPTKP" style="text-align: right;">Rp 0</td>
+                </tr>
+                <tr style="font-weight: bold; border-top: 2px solid #aaa;">
+                    <td>Nilai Kena Pajak (NPOPKP)</td>
+                    <td id="resNPOPKP" style="text-align: right;">Rp 0</td>
+                </tr>
+                <tr style="background-color: #e74c3c; color: white; font-size: 1.2em;">
+                    <td><strong>BPHTB Terutang (5%)</strong></td>
+                    <td id="resBPHTB" style="text-align: right; font-weight: bold;">Rp 0</td>
+                </tr>
+            </table>
+            <div class="note">
+                <strong>Catatan Penting:</strong>
+                <ul>
+                    <li>Jika hasil negatif, maka <strong>BEBAS PAJAK (Rp 0)</strong>.</li>
+                    <li>Syarat Bebas PPh Final: Wajib mengajukan <strong>SKB (Surat Keterangan Bebas)</strong> ke Kantor Pajak (KPP) dengan melampirkan bukti lapor SPT Pewaris.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
+    }
+
+    function toggleSpouse(gender) {
+        const groupSuami = document.getElementById('inputSuamiGroup');
+        const groupIstri = document.getElementById('inputIstriGroup');
+        
+        const valSuami = document.getElementById('suami');
+        const valIstri = document.getElementById('istri');
+
+        if (gender === 'L') {
+            if(groupSuami) groupSuami.style.display = 'none'; 
+            if(valSuami) valSuami.value = 0; 
+            
+            
+            if(groupIstri) groupIstri.syle.display = 'block';
+            
+        } else {
+            if(groupIstri) groupIstri.style.display = 'none';
+            if(valIstri) valIstri.value = 0;
+            
+            if(groupSuami) groupSuami.style.display = 'block';
+        }
+    }
+
+    function validasiIstri(input) {
+        let val = parseInt(input.value);
+        if (val > 4) {
+            document.getElementById('alertIstri').style.display = 'block';
+            input.value = 4;
+        } else {
+            document.getElementById('alertIstri').style.display = 'none';
+        }
+        if (val < 0 || isNaN(val)) input.value = 0;
+    }
+
+    
+    window.onload = function() {
+        tambahBarisHarta(); 
+        if(typeof tambahBarisHarta === 'function') tambahBarisHarta();
+
+        const checkedGender = document.querySelector('input[name="genderPewaris"]:checked');
+        if (checkedGender) {
+            toggleSpouse(checkedGender.value);
+        } else {
+            toggleSpouse('P');
+        }
+    };
+
+    function tambahBarisHarta() {
+        const table = document.getElementById('tableHarta').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+        
+        let cell1 = newRow.insertCell(0);
+        cell1.innerHTML = `<input type="text" placeholder="Contoh: Rumah Tinggal / Emas" class="input-nama-aset">`;
+        
+        let cell2 = newRow.insertCell(1);
+        cell2.innerHTML = `
+            <select class="input-jenis-aset" onchange="hitungTotalHarta()">
+                <option value="properti">Tanah/Bangunan</option>
+                <option value="non-properti">Uang/Emas/Kendaraan</option>
+            </select>`;
+            
+        let cell3 = newRow.insertCell(2);
+        cell3.innerHTML = `<input type="number" value="0" min="0" class="input-nilai-aset" oninput="hitungTotalHarta()" placeholder="0">`;
+        
+        let cell4 = newRow.insertCell(3);
+        cell4.innerHTML = `<button class="btn-delete" onclick="hapusBaris(this)">X</button>`;
+    }
+
+    function hapusBaris(btn) {
+        const row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        hitungTotalHarta();
+    }
+
+    function hitungTotalHarta() {
+        let totalAll = 0;
+        let totalProp = 0;
+        
+        const rows = document.querySelectorAll('#tableHarta tbody tr');
+        
+        rows.forEach(row => {
+            const nilai = parseFloat(row.querySelector('.input-nilai-aset').value) || 0;
+            const jenis = row.querySelector('.input-jenis-aset').value;
+            
+            totalAll += nilai;
+            if(jenis === 'properti') {
+                totalProp += nilai;
+            }
+        });
+
+        document.getElementById('displayTotalHarta').innerText = formatRupiah(totalAll);
+        document.getElementById('totalHartaValue').value = totalAll;
+        
+        document.getElementById('displayProperti').value = formatRupiah(totalProp);
+        document.getElementById('totalPropertiValue').value = totalProp;
+    }
+
+
+    function hitungWaris() {
+        const harta = parseFloat(document.getElementById('totalHartaValue').value) || 0;
+        const genderPewaris = document.querySelector('input[name="genderPewaris"]:checked').value;
+        const suami = parseInt(document.getElementById('suami').value) || 0;
+        const istri = parseInt(document.getElementById('istri').value) || 0;
+        const ayah = parseInt(document.getElementById('ayah').value) || 0;
+        const ibu = parseInt(document.getElementById('ibu').value) || 0;
+        const anakLk = parseInt(document.getElementById('anakLaki').value) || 0;
+        const anakPr = parseInt(document.getElementById('anakPerempuan').value) || 0;
+
+        if (harta <= 0) { alert("Mohon isi daftar harta waris terlebih dahulu."); return; }
+
+        let heirs = [];
+        const adaAnak = (anakLk + anakPr) > 0;
+        const adaAnakLk = anakLk > 0;
+
+        if (suami === 1 && genderPewaris === 'P') {
+            heirs.push({ name: "Suami", share: adaAnak ? 1/4 : 1/2, count: 1, type: "Fardh" });
+        }
+        if (genderPewaris === 'L' && istri > 0) {
+            const shareIstriTotal = adaAnak ? 1/8 : 1/4;
+            heirs.push({ name: "Istri", share: shareIstriTotal, count: istri, type: "Fardh" });
+        }
+
+        if (ibu === 1) {
+            heirs.push({ name: "Ibu", share: adaAnak ? 1/6 : 1/3, count: 1, type: "Fardh" });
+        }
+        if (ayah === 1) {
+            if (adaAnakLk) {
+                heirs.push({ name: "Ayah", share: 1/6, count: 1, type: "Fardh" }); 
+            } else if (adaAnak) {
+                heirs.push({ name: "Ayah", share: 1/6, count: 1, type: "Fardh + Sisa" });
+            } else {
+                heirs.push({ name: "Ayah", share: 0, count: 1, type: "Ashobah" });
+            }
+        }
+
+        if (anakPr > 0 && !adaAnakLk) {
+            const shareTotal = (anakPr === 1) ? 1/2 : 2/3;
+            heirs.push({ name: "Anak Perempuan", share: shareTotal, count: anakPr, type: "Fardh" });
+        }
+
+        let totalShareFardh = heirs.reduce((s,h) => s + (Number(h.share) || 0), 0);
+        let factor = 1;
+        if (totalShareFardh > 1) {
+            factor = 1 / totalShareFardh; 
+        }
+
+        heirs.forEach(h => {
+            if (h.share > 0) h.money = (h.share * factor) * harta;
+            else h.money = 0;
+        });
+
+        const totalDistributed = heirs.reduce((s,h) => s + (Number(h.money) || 0), 0);
+        let remainingMoney = Math.max(0, harta - totalDistributed);
+        let ashobahEntries = [];
+
+        if (adaAnakLk) {
+            const totalParts = (anakLk * 2) + (anakPr * 1);
+            if (remainingMoney > 0) {
+                const sharePerPart = remainingMoney / totalParts;
+                if (anakLk > 0) ashobahEntries.push({ name: "Anak Laki-laki (Ashobah)", count: anakLk, money: sharePerPart * anakLk * 2 });
+                if (anakPr > 0) ashobahEntries.push({ name: "Anak Perempuan (Ashobah)", count: anakPr, money: sharePerPart * anakPr * 1 });
+                remainingMoney = 0;
+            }
+        } else {
+            const ayahObj = heirs.find(h => h.name === "Ayah");
+            if (ayahObj && (ayahObj.type.includes("Ashobah") || ayahObj.type.includes("Sisa"))) {
+                if (remainingMoney > 0) {
+                    ashobahEntries.push({ name: "Ayah (Sisa Harta)", count: 1, money: remainingMoney });
+                    remainingMoney = 0;
+                }
+            }
+        }
+
+        const tableBody = document.querySelector('#resultTable tbody');
+        tableBody.innerHTML = "";
+
+        const renderRow = (name, shareText, money, count) => {
+            const perOrang = (count > 1 && money > 0) ? `<br><small>Per orang: ${formatRupiah(money/count)}</small>` : '';
+            return `<tr>
+                <td>${name} ${count > 1 ? `(${count} orang)` : ''}</td>
+                <td>${shareText}</td>
+                <td><strong>${formatRupiah(money)}</strong> ${perOrang}</td>
+            </tr>`;
+        };
+
+        heirs.forEach(h => {
+            if (h.money > 0 || h.type === "Ashobah") {
+                let shareTxt = (h.share > 0) ? (h.share * factor).toFixed(4) : "Sisa";
+                if(factor < 1) shareTxt += " (Aul)";
+                tableBody.innerHTML += renderRow(h.name, shareTxt, h.money, h.count);
+            }
+        });
+
+        ashobahEntries.forEach(a => {
+            tableBody.innerHTML += renderRow(a.name, "Sisa (Ashobah)", a.money, a.count);
+        });
+
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('sisaHartaInfo').innerText = remainingMoney > 100 ? `Terdapat Sisa Harta (Radd/Baitul Mal): ${formatRupiah(remainingMoney)}` : "Harta terbagi habis.";
+        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+    }
+
+
+    function hitungBPHTB() {
+        const nilaiProperti = parseFloat(document.getElementById('totalPropertiValue').value) || 0;
+        const npoptkp = parseFloat(document.getElementById('npoptkp').value) || 0;
+
+        if (nilaiProperti === 0) {
+            alert("Tidak ada aset berupa Tanah/Bangunan yang dimasukkan dalam daftar harta.");
+            return;
+        }
+
+        let npopkp = nilaiProperti - npoptkp;
+        if (npopkp < 0) npopkp = 0;
+
+        const bphtb = npopkp * 0.05;
+
+        document.getElementById('resNPOP').innerText = formatRupiah(nilaiProperti);
+        document.getElementById('resNPOPTKP').innerText = formatRupiah(npoptkp);
+        document.getElementById('resNPOPKP').innerText = formatRupiah(npopkp);
+        document.getElementById('resBPHTB').innerText = formatRupiah(bphtb);
+
+        document.getElementById('taxResultArea').style.display = 'block';
+        document.getElementById('taxResultArea').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const themeBtn = document.getElementyById('themeToggle')
+    const body = document.body;
+
+    if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-mode');
+        themeBtn.innerText = '☀️ Mode Siang';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        body.classList.toggle9('dark-mode');
+        if (body.classList.contains('darkmode')) {
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerText = '☀️ Mode Siang';
+        } else {
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerText = '🌙 Mode Malam';
+        }
+    });
+
+</script>
+<script>
+    // Tunggu sampai halaman selesai dimuat sepenuhnya
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const themeBtn = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Cek apakah tombol benar-benar ada untuk mencegah error
+        if (!themeBtn) {
+            console.error("Tombol dengan ID 'themeToggle' tidak ditemukan!");
+            return;
+        }
+
+        // 1. Cek simpanan pilihan terakhir pengguna
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeBtn.innerText = '☀️ Mode Siang';
+        }
+
+        // 2. Aksi saat diklik
+        themeBtn.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            // Debugging: Munculkan pesan kecil di console browser (F12)
+            console.log("Tombol diklik. Mode sekarang: " + (body.classList.contains('dark-mode') ? "Gelap" : "Terang"));
+
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeBtn.innerText = '☀️ Mode Siang';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeBtn.innerText = '🌙 Mode Malam';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
