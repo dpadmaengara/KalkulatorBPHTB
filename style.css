@@ -307,7 +307,7 @@ tr:hover {
     .asset-table, 
     .result-table {
         display: block;        
-        overflow-x: fixed;
+        overflow-x: visible;
         white-space: normal;   
         width: 100%;
         table-layout: fixed;
