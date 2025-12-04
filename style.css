@@ -304,9 +304,8 @@ tr:hover {
     table, 
     .asset-table, 
     .result-table {
-        display: block;        
-        overflow-x: visible;      
-        white-space: nowrap;   
+        display: block;              
+        white-space: normal;   
         width: 100%;
     }
 
