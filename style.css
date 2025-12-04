@@ -304,11 +304,17 @@ tr:hover {
     table, 
     .asset-table, 
     .result-table {
-        display: block;              
+        display: block;  
+        overflow-x: fixed;
         white-space: normal;   
         width: 100%;
     }
-
+    
+   td, th {
+    padding: 8px 4px;      
+        font-size: 0.8em;    
+        word-wrap: break-word; 
+    }
     
     .radio-group label {
         padding: 8px 5px;
