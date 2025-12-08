@@ -418,29 +418,24 @@
 
 </script>
 <script>
-    // Tunggu sampai halaman selesai dimuat sepenuhnya
     document.addEventListener('DOMContentLoaded', function() {
         
         const themeBtn = document.getElementById('themeToggle');
         const body = document.body;
 
-        // Cek apakah tombol benar-benar ada untuk mencegah error
         if (!themeBtn) {
             console.error("Tombol dengan ID 'themeToggle' tidak ditemukan!");
             return;
         }
 
-        // 1. Cek simpanan pilihan terakhir pengguna
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             themeBtn.innerText = '☀️ Mode Siang';
         }
 
-        // 2. Aksi saat diklik
         themeBtn.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
             
-            // Debugging: Munculkan pesan kecil di console browser (F12)
             console.log("Tombol diklik. Mode sekarang: " + (body.classList.contains('dark-mode') ? "Gelap" : "Terang"));
 
             if (body.classList.contains('dark-mode')) {
