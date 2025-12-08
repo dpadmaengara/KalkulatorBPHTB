@@ -208,9 +208,7 @@ button:active { transform: scale(0.98); }
     background-color: var(--border-color);
 }
 
-/* =========================================
-   7. TABEL (TABLES)
-   ========================================= */
+
 table {
     width: 100%;
     border-collapse: collapse;
